@@ -8,3 +8,5 @@ It also contains the various examples that are included with the full version of
 The deployment packager also removes any server-side code from the source automatically so when writing multiplayer / networked games none of your server-side code is visible to the client even if they do a view-source on the game.js file.
 
 If you have any comments, questions, requests, issues or bug reports please use the GitHub issue tracker for this repository: https://github.com/coolbloke1324/ige_prototype/issues
+
+The Isogenic Game Engine website can be found here: http://www.isogenicengine.com
