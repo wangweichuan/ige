@@ -48,7 +48,6 @@ window.igeLoader = (function () {
 			// Check that the file should be loaded on the client
 			if (this._coreList[i][0].indexOf('c') > -1) {
 				this._fileList.push(igeRoot + this._coreList[i][2]);
-				console.log('Added ' + igeRoot + this._coreList[i][2]);
 			}
 		}
 
