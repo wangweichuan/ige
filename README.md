@@ -4,14 +4,12 @@ This repository contains the latest build of the Isogenic Game Engine (IGE) prot
 
 ## Examples
 
-It also contains the various examples that are included with the full version of the IGE and each example includes a "deploy" folder where you can run a compiled version of the example. "Compiled" is not meant in the strict computer programming sense since you cannot compile JavaScript but in the more general sense in that the full IGE includes a handy script that scans your project, determines all the dependencies and then packages up all your game code and engine code that you used into one single game.js file.
-
-The deployment packager also removes any server-side code from the source automatically so when writing multiplayer / networked games none of your server-side code is visible to the client even if they do a view-source on the game.js file.
+The "examples" folder contains most of the examples that are included with the full version of the IGE. Load an example's index.html to see it working. Some of the examples require being run from a web server such as apache as they make use of XHR.
 
 ## FYI
-The prototype version of the engine is built from many (but not all) of the classes that the full version contains. Notable exceptions are some of the 3d physics and all networking classes. Since the engine has been packaged into a single file (./engine/core/ige.js) it contains many classes that you might not use in your game. The ige.js file weighs in at just over 400kb but if you check some of the examples in their deploy/game.js file you can see that when packaged the engine can be reduced quite a lot... to under 100kb in a lot of cases.
+The prototype version of the engine is built from many (but not all) of the classes that the full version contains. Notable exceptions are some of the 3d physics and all networking classes. Since the engine has been packaged into a single file (./engine/core/ige.js) it contains many classes that you might not use in your game. The ige.js file weighs in at just over 400kb but when using the full version of the engine it includes a packaging system that automatically removes unused classes from the final deployment of your project.
 
-This makes the prototype version great for development and testing but less awesome for production deployment. If you are going to deploy your game for production use please purchase a license so that you can properly package your game and it's dependencies.
+This makes the prototype version great for development and testing but less awesome for production deployment since every byte counts. If you are going to deploy your game for production use please purchase a license so that you can properly package your game and it's dependencies.
 
 ## License
 
