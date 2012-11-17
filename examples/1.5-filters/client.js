@@ -12,16 +12,22 @@ var Client = IgeClass.extend({
 		this.verdana = new IgeFontSheet('../assets/textures/fonts/verdana_10px.png', 20);
 
 		// Load the fairy texture a few times and store it in the gameTexture array
-		gameTexture[0] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[1] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[2] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[3] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[4] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[5] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[6] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[7] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[8] = new IgeTexture('../assets/textures/sprites/fairy.png');
-		gameTexture[9] = new IgeTexture('../assets/textures/sprites/fairy.png');
+		gameTexture[0] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[1] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[2] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[3] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[4] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[5] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[6] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[7] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[8] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[9] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[10] = new IgeTexture('../assets/textures/sprites/lenna.png');
+		gameTexture[11] = new IgeTexture('../assets/textures/sprites/tron.png');
+		gameTexture[12] = new IgeTexture('../assets/textures/sprites/tronGlowMask.png');
+		gameTexture[13] = new IgeTexture('../assets/textures/sprites/tron.png');
+		gameTexture[14] = new IgeTexture('../assets/textures/sprites/tron.png');
+		gameTexture[15] = new IgeTexture('../assets/textures/sprites/tronGlowMask.png');
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -32,6 +38,8 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
+					var yStart = -300;
+
 					// Create the scene
 					self.scene1 = new IgeScene2d()
 						.id('scene1');
@@ -47,13 +55,13 @@ var Client = IgeClass.extend({
 						.mount(ige);
 
 					// Create an entity and mount it to the scene
-					self.obj[0] = new Rotator()
+					self.obj[0] = new IgeEntity()
 						.id('fairy0')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[0])
-						.translateTo(0, -150, 0)
+						.translateTo(0, yStart + 70, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -62,20 +70,20 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Original Image')
-						.translateTo(0, -220, 0)
+						.translateTo(0, yStart, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					// Create a second rotator entity and mount
+					// Create a second IgeEntity entity and mount
 					// it to the first one at 0, 50 relative to the
 					// parent
-					self.obj[1] = new Rotator()
+					self.obj[1] = new IgeEntity()
 						.id('fairy1')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[1])
-						.translateTo(-300, 0, 0)
+						.translateTo(-300, yStart + 220, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -84,18 +92,18 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Greyscale')
-						.translateTo(-300, -70, 0)
+						.translateTo(-300, yStart + 150, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
 					// Create some more fairies and mount them to the scene
-					self.obj[2] = new Rotator()
+					self.obj[2] = new IgeEntity()
 						.id('fairy2')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[2])
-						.translateTo(-150, 0, 0)
+						.translateTo(-150, yStart + 220, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -104,17 +112,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Brighten')
-						.translateTo(-150, -70, 0)
+						.translateTo(-150, yStart + 150, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[3] = new Rotator()
+					self.obj[3] = new IgeEntity()
 						.id('fairy3')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[3])
-						.translateTo(0, 0, 0)
+						.translateTo(0, yStart + 220, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -123,17 +131,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Threshold')
-						.translateTo(0, -70, 0)
+						.translateTo(0, yStart + 150, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[4] = new Rotator()
+					self.obj[4] = new IgeEntity()
 						.id('fairy4')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[4])
-						.translateTo(150, 0, 0)
+						.translateTo(150, yStart + 220, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -142,17 +150,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Sharpen')
-						.translateTo(150, -70, 0)
+						.translateTo(150, yStart + 150, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[5] = new Rotator()
+					self.obj[5] = new IgeEntity()
 						.id('fairy5')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[5])
-						.translateTo(300, 0, 0)
+						.translateTo(300, yStart + 220, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -161,17 +169,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Blur')
-						.translateTo(300, -70, 0)
+						.translateTo(300, yStart + 150, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[6] = new Rotator()
+					self.obj[6] = new IgeEntity()
 						.id('fairy6')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[6])
-						.translateTo(-300, 150, 0)
+						.translateTo(-300, yStart + 370, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -180,17 +188,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Emboss')
-						.translateTo(-300, 80, 0)
+						.translateTo(-300, yStart + 300, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[7] = new Rotator()
+					self.obj[7] = new IgeEntity()
 						.id('fairy7')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[7])
-						.translateTo(-150, 150, 0)
+						.translateTo(-150, yStart + 370, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -199,17 +207,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Edge Detect')
-						.translateTo(-150, 80, 0)
+						.translateTo(-150, yStart + 300, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[8] = new Rotator()
+					self.obj[8] = new IgeEntity()
 						.id('fairy8')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[8])
-						.translateTo(0, 150, 0)
+						.translateTo(0, yStart + 370, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -218,17 +226,17 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Edge Enhance')
-						.translateTo(0, 80, 0)
+						.translateTo(0, yStart + 300, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
-					self.obj[9] = new Rotator()
+					self.obj[9] = new IgeEntity()
 						.id('fairy9')
 						.depth(0)
 						.width(100)
 						.height(100)
 						.texture(gameTexture[9])
-						.translateTo(150, 150, 0)
+						.translateTo(150, yStart + 370, 0)
 						.mount(self.scene1);
 
 					new IgeFontEntity()
@@ -237,7 +245,102 @@ var Client = IgeClass.extend({
 						.texture(self.verdana)
 						.textAlignX(1)
 						.text('Color Overlay')
-						.translateTo(150, 80, 0)
+						.translateTo(150, yStart + 300, 0)
+						.drawBounds(false)
+						.mount(self.scene1);
+
+					self.obj[10] = new IgeEntity()
+						.id('fairy10')
+						.depth(0)
+						.width(100)
+						.height(100)
+						.texture(gameTexture[10])
+						.translateTo(300, yStart + 370, 0)
+						.mount(self.scene1);
+
+					new IgeFontEntity()
+						.id('title10')
+						.depth(1)
+						.texture(self.verdana)
+						.textAlignX(1)
+						.text('Sobel')
+						.translateTo(300, yStart + 300, 0)
+						.drawBounds(false)
+						.mount(self.scene1);
+
+					self.obj[11] = new IgeEntity()
+						.id('fairy11')
+						.depth(0)
+						.width(100)
+						.height(100)
+						.texture(gameTexture[11])
+						.translateTo(-300, yStart + 520, 0)
+						.mount(self.scene1);
+
+					new IgeFontEntity()
+						.id('title11')
+						.depth(1)
+						.texture(self.verdana)
+						.textAlignX(1)
+						.text('Glow: Original')
+						.translateTo(-300, yStart + 450, 0)
+						.drawBounds(false)
+						.mount(self.scene1);
+
+					self.obj[12] = new IgeEntity()
+						.id('fairy12')
+						.depth(0)
+						.width(100)
+						.height(100)
+						.texture(gameTexture[12])
+						.translateTo(-150, yStart + 520, 0)
+						.mount(self.scene1);
+
+					new IgeFontEntity()
+						.id('title12')
+						.depth(1)
+						.texture(self.verdana)
+						.textAlignX(1)
+						.text('Glow: Mask Image')
+						.translateTo(-150, yStart + 450, 0)
+						.drawBounds(false)
+						.mount(self.scene1);
+
+					self.obj[13] = new IgeEntity()
+						.id('fairy13')
+						.depth(0)
+						.width(100)
+						.height(100)
+						.texture(gameTexture[13])
+						.translateTo(0, yStart + 520, 0)
+						.mount(self.scene1);
+
+					new IgeFontEntity()
+						.id('title13')
+						.depth(1)
+						.texture(self.verdana)
+						.textAlignX(1)
+						.text('Glow: Result')
+						.translateTo(0, yStart + 450, 0)
+						.drawBounds(false)
+						.mount(self.scene1);
+
+					self.obj[14] = new IgeEntity()
+						.id('fairy14')
+						.depth(0)
+						.width(100)
+						.height(100)
+						.texture(gameTexture[14])
+						.translateTo(150, yStart + 520, 0)
+						.mount(self.scene1);
+
+					new IgeFontEntity()
+						.id('title14')
+						.depth(1)
+						.texture(self.verdana)
+						.textAlignX(1)
+						.text('Glow: Dynamic')
+						.translateTo(150, yStart + 450, 0)
 						.drawBounds(false)
 						.mount(self.scene1);
 
@@ -260,13 +363,43 @@ var Client = IgeClass.extend({
 					gameTexture[6].applyFilter(IgeFilters.emboss);
 
 					// Apply an edge detect filter to the seventh fairy texture
-					gameTexture[7].applyFilter(IgeFilters.edgeDetect);
+					gameTexture[7].applyFilter(IgeFilters.edgeDetect, {value: 80});
 
 					// Apply an edge enhance filter to the eighth fairy texture
 					gameTexture[8].applyFilter(IgeFilters.edgeEnhance);
 
 					// Apply a colour overlay filter to the ninth fairy texture
-					gameTexture[9].applyFilter(IgeFilters.colorOverlay, {color: 'rgba(255, 0, 0, 0.5)'});
+					gameTexture[9].applyFilter(IgeFilters.colorOverlay, {color: 'rgba(0, 0, 255, 0.5)'});
+
+					// Apply a sobel filter to the tenth fairy texture
+					gameTexture[10].applyFilter(IgeFilters.sobel);
+
+					// Apply a glow mask filter to the eleventh texture
+					gameTexture[13].applyFilter(IgeFilters.glowMask, {glowMask: gameTexture[12], blurPasses:50, glowPasses: 2});
+
+					// Pre-apply the blur to the glow mask so we don't calc it every tick
+					gameTexture[15].applyFilter(IgeFilters.blur, {value:80});
+					glowFilterData = {glowMask: gameTexture[15], blurPasses:0, glowPasses: 2};
+
+					// Set a pre-filter on texture 14 so every tick it applies the filter
+					gameTexture[14].preFilter(IgeFilters.glowMask, glowFilterData);
+
+					// Now every few ms change the glow filter data values to make it pulse
+					setInterval(function () {
+						// Make a new glowPassDirection property
+						if (!glowFilterData.glowPassDirection) {
+							glowFilterData.glowPasses++;
+
+							if (glowFilterData.glowPasses > 14) {
+								glowFilterData.glowPassDirection = 1;
+							}
+						} else {
+							glowFilterData.glowPasses--;
+							if (glowFilterData.glowPasses < 1) {
+								glowFilterData.glowPassDirection = 0;
+							}
+						}
+					}, 64);
 				}
 			});
 		});

@@ -9,7 +9,7 @@ var igeClientConfig = {
 		'./models/modelTurret.js',
 
 		/* 3d filters */
-		/*'../../engine/components/three/EffectComposer.js',
+		'../../engine/components/three/EffectComposer.js',
 		'../../engine/components/three/RenderPass.js',
 		'../../engine/components/three/ShaderExtras.js',
 		'../../engine/components/three/BloomPass.js',
@@ -17,7 +17,7 @@ var igeClientConfig = {
 		'../../engine/components/three/DotScreenPass.js',
 		'../../engine/components/three/TexturePass.js',
 		'../../engine/components/three/ShaderPass.js',
-		'../../engine/components/three/MaskPass.js',*/
+		'../../engine/components/three/MaskPass.js',
 
 		/* Standard game scripts */
 		'./client.js',
