@@ -11,6 +11,7 @@ var Client = IgeClass.extend({
 		// Load textures
 		self.textures.ship = new IgeTexture('./assets/Ship.js');
 		self.textures.rectangle = new IgeTexture('./assets/Rectangle.js');
+		self.textures.orb = new IgeTexture('./assets/Orb.js');
 		self.textures.font = new IgeFontSheet('./assets/agency_fb_20pt.png', 3);
 
 		// Implement our externally declared methods
@@ -41,6 +42,7 @@ var Client = IgeClass.extend({
 					ige.input.mapAction('left', ige.input.key.left);
 					ige.input.mapAction('right', ige.input.key.right);
 					ige.input.mapAction('thrust', ige.input.key.up);
+					ige.input.mapAction('drop', ige.input.key.space);
 
 					self.player = new Player()
 						.addBehaviour('PlayerControl', PlayerBehaviour)
@@ -52,17 +54,6 @@ var Client = IgeClass.extend({
 					//ige.box2d.enableDebug(self.mainScene);
 
 					self.vp1.camera.trackTranslate(self.player, 20);
-
-					var Test = IgeEntity.extend({
-						classId: 'Test',
-						tick: function (ctx) {
-							this._super(ctx);
-							ctx.strokeStyle = '#ffffff';
-							ige.client.terrainPoly.render(ctx);
-						}
-					});
-
-					new Test().mount(ige.client.mainScene);
 
 					// Set the contact listener methods to detect when
 					// contacts (collisions) begin and end
@@ -76,21 +67,58 @@ var Client = IgeClass.extend({
 								// The player has crashed!
 								self.player.crash();
 							} else if (contact.igeEitherGroup('landingPad') && contact.igeEitherGroup('ship')) {
+								// Clear the old orb data
+								delete self.player._oldOrb;
+
 								// If the player ship touches a landing pad, check velocity and angle
-								if (Math.degrees(self.player._rotate.z) > 30 || Math.degrees(self.player._rotate.z) < -30) {
-									console.log(Math.degrees(self.player._rotate.z));
+								var degrees = Math.degrees(self.player._rotate.z),
+									wound = Math.round(degrees / 360);
+
+								if (wound > 0) {
+									degrees -= (360 * wound);
+								}
+
+								if (wound < 0) {
+									degrees -= (360 * wound);
+								}
+
+								self.player._rotate.z = Math.radians(degrees);
+
+								if (degrees > 30 || degrees < -30) {
 									self.player.crash();
+								} else {
+									// The player has landed
+									self.player._landed = true;
+								}
+							} else if (!self.player._carryingOrb && contact.igeEitherGroup('orb') && contact.igeEitherGroup('ship')) {
+								// Check if it is our sensor
+								if (contact.m_fixtureA.IsSensor() || contact.m_fixtureB.IsSensor()) {
+									// Sensor has collided, attach orb to ship!
+									// Set carrying orb
+									self.player.carryOrb(contact.igeEntityByGroup('orb'), contact);
+								}
+							} else if (contact.igeEitherGroup('orb') && contact.igeEitherGroup('landingPad')) {
+								// Orb has reached landing pad, score!
+								if (self.player._carryingOrb && self.player._orb === contact.igeEntityByGroup('orb')) {
+									// The orb the player was carrying has reached a pad
+									self.player._orb.deposit(true, contact.igeEntityByGroup('landingPad'));
+								} else {
+									contact.igeEntityByGroup('orb').deposit(false, contact.igeEntityByGroup('landingPad'));
 								}
 							}
-						}/*,
+						},
 						// Listen for when contact's end
 						function (contact) {
 							//console.log('Contact ends between', contact.igeEntityA()._id, 'and', contact.igeEntityB()._id);
-						},
+							if (contact.igeEitherGroup('landingPad') && contact.igeEitherGroup('ship')) {
+								// The player has taken off
+								self.player._landed = false;
+							}
+						}/*,
 						// Handle pre-solver events
 						function (contact) {
 							// If player ship collides with lunar surface, crash!
-							if (contact.igeEitherGroup('floor') && contact.igeEitherGroup('ship')) {
+							if (contact.igeEitherGroup('orb') && contact.igeEitherGroup('ship')) {
 								// Cancel the contact
 								contact.SetEnabled(false);
 							}
@@ -98,6 +126,11 @@ var Client = IgeClass.extend({
 							// You can also check an entity by it's group using igeEitherGroup('groupName')
 						}*/
 					);
+
+					/*new ClientScore('+1 for orb')
+						.translateTo(0, 0, 0)
+						.mount(ige.client.objectScene)
+						.start(1000);*/
 				}
 			});
 		});
