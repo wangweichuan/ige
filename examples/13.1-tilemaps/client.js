@@ -44,6 +44,7 @@ var Client = IgeClass.extend({
 						.drawGrid(3)
 						//.drawMouse(true)
 						.translateTo(-200, 0, 0)
+						.highlightOccupied(true)
 						.drawBounds(false)
 						.mount(self.scene1);
 
@@ -56,7 +57,12 @@ var Client = IgeClass.extend({
 						//.drawMouse(true)
 						.drawBounds(false)
 						.isometricMounts(true)
+						.highlightOccupied(true)
 						.mount(self.scene1);
+
+					var overFunc,
+						outFunc,
+						upFunc;
 
 					// Define a function that will be called when the
 					// mouse cursor moves over one of our entities
@@ -74,30 +80,44 @@ var Client = IgeClass.extend({
 						this.drawBoundsData(false);
 					};
 
+					// Define a function that will be called when the
+					// mouse button "up" event occurs on one of our entities
+					upFunc = function () {
+						console.log(this.overTiles());
+					};
+
 					// Create an entity
 					self.obj[0] = new IgeEntity()
 						.id('fairy1')
 						.depth(1)
 						.texture(gameTexture[0])
 						.mount(self.tileMap1)
-						.translateToTile(0, 0, 0)
-						.widthByTile(1)
-						.heightByTile(1)
+						.widthByTile(2)
+						.heightByTile(2)
+						.translateToTile(0.5, 0.5, 0)
 						.drawBounds(false)
+						.tileWidth(2)
+						.tileHeight(2)
+						.occupyTile()
 						.mouseOver(overFunc)
-						.mouseOut(outFunc);
+						.mouseOut(outFunc)
+						.mouseUp(upFunc);
 
 					self.obj[1] = new IgeEntity()
 						.id('fairy2')
 						.depth(1)
 						.texture(gameTexture[0])
 						.mount(self.tileMap1)
-						.translateToTile(1, 0, 0)
+						.translateToTile(2, 2, 0)
 						.widthByTile(1)
 						.heightByTile(1)
 						.drawBounds(false)
+						.tileWidth(1)
+						.tileHeight(1)
+						.occupyTile()
 						.mouseOver(overFunc)
-						.mouseOut(outFunc);
+						.mouseOut(outFunc)
+						.mouseUp(upFunc);
 
 					// Create two isometric 3d entities
 					self.obj[2] = new IgeEntity()
@@ -106,19 +126,27 @@ var Client = IgeClass.extend({
 						.mount(self.tileMap2)
 						.translateToTile(0, 0, 0)
 						.drawBounds(false)
+						.tileWidth(1)
+						.tileHeight(1)
+						.occupyTile()
 						.size3d(40, 40, 0)
 						.mouseOver(overFunc)
-						.mouseOut(outFunc);
+						.mouseOut(outFunc)
+						.mouseUp(upFunc);
 
 					self.obj[3] = new IgeEntity()
 						.id('3d2')
 						.isometric(true)
 						.mount(self.tileMap2)
-						.translateToTile(1, 0, 0)
+						.translateToTile(1.5, 0.5, 0)
 						.drawBounds(false)
-						.size3d(40, 40, 0)
+						.tileWidth(2)
+						.tileHeight(2)
+						.occupyTile()
+						.size3d(80, 80, 0)
 						.mouseOver(overFunc)
-						.mouseOut(outFunc);
+						.mouseOut(outFunc)
+						.mouseUp(upFunc);
 
 					// Create two fairy entities, and mount each one
 					// to it's 3d entity as created above

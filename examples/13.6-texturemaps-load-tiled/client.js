@@ -20,7 +20,8 @@ var Client = IgeClass.extend({
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.gravity(0, 0)
-			.box2d.createWorld();
+			.box2d.createWorld()
+			.box2d.start();
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -135,9 +136,7 @@ var Client = IgeClass.extend({
 								layerArray[i]
 									.tileWidth(40)
 									.tileHeight(40)
-									//.renderArea(0, 0, 20, 20) // Set the area of the map to render by default
-									.renderAreaAutoSize(true)
-									.trackTranslate(self.player1) // Use this entity as the center of the render area
+									.autoSection(20)
 									//.isometricMounts(false)
 									.drawBounds(false)
 									.drawBoundsData(false)
