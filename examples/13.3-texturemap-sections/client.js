@@ -43,13 +43,14 @@ var Client = IgeClass.extend({
 						.depth(0)
 						.tileWidth(40)
 						.tileHeight(40)
-						.drawGrid(3)
+						//.drawGrid(3)
 						//.drawMouse(true)
 						.translateTo(0, 0, 0)
 						.drawBounds(false)
 						.autoSection(10)
 						.drawSectionBounds(true)
 						.isometricMounts(true)
+						//.translateTo(300, 300, 0)
 						.mount(self.mainScene);
 
 					var texIndex = self.textureMap1.addTexture(self.gameTexture.grassSheet);
