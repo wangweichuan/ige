@@ -18,6 +18,7 @@ The commercial version includes some extra functionality / features:
 * Server-side (Node.js) support
 * License allows commercial use
 * Live developer support via Skype
+* Full unobfuscated, commented source code to fork and edit for your needs
 * Access to related in-development projects such as the GUI editor (currently still in early / alpha stage development) on request
 
 The commercial license starts at just £60 GBP (roughly $99 USD) and can be found here: http://store.isogenicengine.com
