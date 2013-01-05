@@ -11,6 +11,15 @@ The prototype version of the engine is built from many (but not all) of the clas
 
 This makes the prototype version great for development and testing but less awesome for production deployment since every byte counts. If you are going to deploy your game for production use please purchase a license so that you can properly package your game and it's dependencies.
 
+## Differences Between Prototype and Full Commercial Version
+The commercial version includes some extra functionality / features:
+
+* Networking features (full server-side simulation with client-side sync and interpolation)
+* Server-side (Node.js) support
+* License allows commercial use
+* Live developer support via Skype
+* Access to related in-development projects such as the GUI editor (currently still in early / alpha stage development) on request
+
 ## License
 
 You may use the IGE prototype for non-commercial, educational or hobbyist purposes only. If you wish to create a game that utilises the IGE and generates income from any source connected to the game via online means (this includes in-game purchases, banner adverts in the game or on the page the game runs on, bank transfers that were originated offline but were meant for in-game purchases etc) then you need to purchase a license for the engine. Examples of income that is not counted as requiring a license are t-shirts featuring the game or game art, accessories or other real-world items that are not part of the "digital" game etc. You can purchase a license from our website listed below.
