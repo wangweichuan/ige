@@ -17,7 +17,6 @@ The commercial version includes some extra functionality / features:
 * Networking features (full server-side simulation with client-side sync and interpolation)
 * Server-side (Node.js) support
 * License allows commercial use
-* Live developer support via Skype
 * Full unobfuscated, commented source code to fork and edit for your needs
 * Access to related in-development projects such as the GUI editor (currently still in early / alpha stage development) on request
 
