@@ -93,10 +93,19 @@ var Client = IgeClass.extend({
 						.scene(self.mainScene)
 						.drawBounds(true)
 						.drawMouse(true)
-						.mount(ige);
+						//.mount(ige);
 
-					self.vp1.camera.translateTo(100, 20, 0);
-					self.vp1.camera.scaleTo(1, 1, 1);
+					self.vp1.camera.translateTo(0, 0, 0);
+					self.vp2.camera.scaleTo(2, 2, 2);
+					
+					self.cont = new IgeUiEntity()
+						.id('cont')
+						.middle(0)
+						.center(0)
+						.width(300)
+						.height(200)
+						.scaleTo(0.5, 0.5, 0.5)
+						.mount(self.mainScene);
 
 					// Create an entity and mount it to the scene
 					self.obj[0] = new IgeUiEntity()
@@ -106,10 +115,11 @@ var Client = IgeClass.extend({
 						.height(100)
 						.texture(gameTexture[0])
 						//.translateTo(0, 0, 0)
-						.center(50)
-						.middle(20)
+						.center(0)
+						.bottom(0)
+						.scaleTo(1.5, 1.5, 1)
 						//.rotateTo(0, 0, Math.radians(180))
-						.mount(self.uiScene);
+						.mount(self.cont);
 
 					// Create a second rotator entity and mount
 					// it to the first one at 0, 50 relative to the
@@ -121,8 +131,9 @@ var Client = IgeClass.extend({
 						.height(50)
 						.texture(gameTexture[0])
 						//.translateTo(0, 50, 0)
-						.bottom(0)
+						.scaleTo(1.5, 1.5, 1.5)
 						.left(0)
+						.bottom(0)
 						//.rotateTo(0, 0, Math.radians(90))
 						.mouseMove(function (event, eventControl, data) {
 							// Set the custom watch object's value
@@ -173,6 +184,9 @@ var Client = IgeClass.extend({
 
 					ige.watchStart("ige.$('vp2').mousePos().x");
 					ige.watchStart("ige.$('vp2').mousePos().y");
+
+					ige.watchStart("ige.$('vp2').mousePosWorld().x");
+					ige.watchStart("ige.$('vp2').mousePosWorld().y");
 
 					// Now add some custom objects to the watch list
 					ige.watchStart(self.customWatch.w4);

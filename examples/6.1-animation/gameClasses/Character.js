@@ -4,7 +4,7 @@ var Character = IgeEntity.extend({
 
 	init: function () {
 		var self = this;
-		this._super();
+		IgeEntity.prototype.init.call(this);
 
 		// Setup the entity
 		self.addComponent(IgeAnimationComponent)
@@ -12,7 +12,7 @@ var Character = IgeEntity.extend({
 			.depth(1);
 
 		// Load the character texture file
-		this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_c.png', 12, 8);
+		this._characterTexture = new IgeCellSheet('./assets/textures/sprites/vx_chara02_c.png', 12, 8);
 
 		// Wait for the texture to load
 		this._characterTexture.on('loaded', function () {
@@ -173,12 +173,12 @@ var Character = IgeEntity.extend({
 		return this;
 	},
 
-	tick: function (ctx) {
+	update: function (ctx) {
 		// Set the depth to the y co-ordinate which basically
 		// makes the entity appear further in the foreground
 		// the closer they become to the bottom of the screen
 		this.depth(this._translate.y);
-		this._super(ctx);
+		IgeEntity.prototype.update.call(this, ctx);
 	},
 
 	destroy: function () {
@@ -188,7 +188,7 @@ var Character = IgeEntity.extend({
 		}
 
 		// Call the super class
-		this._super();
+		IgeEntity.prototype.destroy.call(this);
 	}
 });
 

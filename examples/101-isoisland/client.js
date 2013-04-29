@@ -292,8 +292,11 @@ var Client = IgeClass.extend({
 
 								// Turn the ghost item into a "real" building
 								item.opacity(1)
-									.place()
-									.build(Math.floor(Math.random() * 8) + 3); // A skyscraper-only method that tells it to add a floor up to the number specified
+									.place();
+								
+								if (typeof(item.build) === 'function') {
+									item.build(Math.floor(Math.random() * 8) + 3); // A skyscraper-only method that tells it to add a floor up to the number specified
+								}
 
 								// Now that we've placed a building, ask the server
 								// to ok / save the request. If the server doesn't
@@ -308,7 +311,7 @@ var Client = IgeClass.extend({
 								});
 
 								// Now create a new temporary building
-								tempItem = ige.client.createTemporaryItem('SkyScraper')
+								tempItem = ige.client.createTemporaryItem('Bank') // SkyScraper, Electricals etc
 									.opacity(0.7);
 
 								ige.client.data('ghostItem', tempItem);
@@ -350,8 +353,9 @@ var Client = IgeClass.extend({
 			.top(0)
 			.width('100%')
 			.height(40)
-			.mouseDown(function () { ige.input.stopPropagation(); })
-			.mouseUp(function () { ige.input.stopPropagation(); })
+			.mouseDown(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
+			.mouseUp(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
+			.mouseMove(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
 			.mount(this.uiScene);
 
 		// Create the menu bar buttons
@@ -382,6 +386,7 @@ var Client = IgeClass.extend({
 				this.select();
 				ige.input.stopPropagation();
 			})
+			.mouseMove(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
 			// Define the callback when the radio button is selected
 			.select(function () {
 				ige.client.data('cursorMode', 'select');
@@ -461,6 +466,7 @@ var Client = IgeClass.extend({
 				this.select();
 				ige.input.stopPropagation();
 			})
+			.mouseMove(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
 			// Define the callback when the radio button is selected
 			.select(function () {
 				ige.client.data('cursorMode', 'delete');
@@ -500,6 +506,7 @@ var Client = IgeClass.extend({
 				this.select();
 				ige.input.stopPropagation();
 			})
+			.mouseMove(function () { if (ige.client.data('cursorMode') !== 'panning') { ige.input.stopPropagation(); } })
 			// Define the callback when the radio button is selected
 			.select(function () {
 				ige.client.data('cursorMode', 'build');
@@ -509,7 +516,7 @@ var Client = IgeClass.extend({
 				// wants to build a skyscraper but actually we should probably
 				// fire up a menu here and let them pick from available buildings
 				// TODO: Make this show a menu of buildings and let the user pick
-				var tempItem = ige.client.createTemporaryItem('SkyScraper')
+				var tempItem = ige.client.createTemporaryItem('Bank')
 					.opacity(0.7);
 
 				ige.client.data('ghostItem', tempItem);
@@ -545,11 +552,11 @@ var Client = IgeClass.extend({
 		// the entire skyscraper can be moved around or removed
 		// from the scene as one single entity. Take a look in the
 		// ClientObjects.js file to see how it is defined!
-		this.placeItem('SkyScraper', 15, 10)
+		/*this.placeItem('SkyScraper', 15, 10)
 			.build(5);
 
 		this.placeItem('SkyScraper', 1, 4)
-			.addFloors(2);
+			.addFloors(2);*/
 	},
 
 	/**

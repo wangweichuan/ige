@@ -1,7 +1,9 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
-		ige.showStats(1);
+		//ige.showStats(1);
+		ige.debugEnabled(false);
+		ige.debugTiming(false);
 
 		// Load our textures
 		var self = this,
@@ -15,7 +17,7 @@ var Client = IgeClass.extend({
 
 		this.obj = [];
 
-		gameTexture[0] = new IgeTexture('../assets/textures/sprites/fairy.png');
+		gameTexture[0] = new IgeTexture('./assets/textures/sprites/fairy.png');
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -186,7 +188,7 @@ var Client = IgeClass.extend({
 					// Make a couple of rotating entities to add to
 					// our scene
 					self.obj[0] = new IgeEntity()
-						.addBehaviour('rotator', RotatorBehaviour)
+						.addBehaviour('rotator', RotatorBehaviour, false)
 						.depth(1)
 						.width(100)
 						.height(100)
@@ -194,8 +196,8 @@ var Client = IgeClass.extend({
 						.mount(self.scene1);
 
 					self.obj[1] = tempObj = new IgeEntity()
-						.addBehaviour('scaler', ScalerBehaviour)
-						.addBehaviour('rotator', RotatorBehaviourAC)
+						.addBehaviour('scaler', ScalerBehaviour, false)
+						.addBehaviour('rotator', RotatorBehaviourAC, false)
 						.depth(0)
 						.width(100)
 						.height(100)
