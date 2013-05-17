@@ -96,6 +96,15 @@ entity.animation.setAllFps(12);
 </div>
 					</div>
 				
+</div><h3 class="methodTitle">playing</h3>
+<div class="methodSection">
+    <!--=if{desc}[-->
+    <div class="methodDesc">Checks the current animation state, either started or stopped.</div>
+    <!--=if{desc}]-->
+    <div class="methodDefinition"><span class="methodName">playing</span>()</div>
+    <div class="methodArgs"></div>
+    <div class="methodReturnDesc">Returns {<span class="argType">Boolean</span>} True if an animation is currently playing or false if not.</div>
+    
 </div><h3 class="methodTitle">start</h3>
 <div class="methodSection">
     <!--=if{desc}[-->
@@ -113,6 +122,70 @@ entity.animation.setAllFps(12);
 var entity = new IgeEntity()
     .addComponent(IgeAnimationComponent)
     .animation.define('anim1', [1, 2, 3, 4], 25, -1);
+
+entity.animation.start('anim1');
+</code></pre>
+</div>
+					</div>
+				
+					<div class="methodExample">
+						<div class="content"><h1>Start an animation with callbacks for animation events</h1>
+
+<pre><code>// Create an entity, add the animation component, define
+// an animation and then start it
+var entity = new IgeEntity()
+    .addComponent(IgeAnimationComponent)
+    .animation.define('anim1', [1, 2, 3, 4], 25, -1);
+
+// In each animation callback...
+// this = the entity's animation component instance
+// anim = the animation component's _anim object
+// this._entity = the entity the animation is attached to
+
+entity.animation.start('anim1', {
+        onLoop: function (anim) {
+            console.log('Animation looped', this, anim);    
+        },
+        onStopped: function (anim) {
+            console.log('Animation stopped', this, anim);   
+        },
+        onComplete: function (anim) {
+            console.log('Animation completed', this, anim); 
+        }
+});
+</code></pre>
+</div>
+					</div>
+				
+					<div class="methodExample">
+						<div class="content"><h1>Start an animation with callbacks for animation events via event listeners</h1>
+
+<pre><code>// Create an entity, add the animation component, define
+// an animation and then start it
+var entity = new IgeEntity()
+    .addComponent(IgeAnimationComponent)
+    .animation.define('anim1', [1, 2, 3, 4], 25, -1);
+
+// In each animation callback...
+// this = the entity's animation component instance
+// anim = the animation component's _anim object
+// this._entity = the entity the animation is attached to
+
+entity.animation.on('started', function (anim) {
+        console.log('Animation started', this, anim);   
+});
+
+entity.animation.on('loopComplete', function (anim) {
+        console.log('Animation looped', this, anim);    
+});
+
+entity.animation.on('stopped', function (anim) {
+        console.log('Animation stopped', this, anim);   
+});
+
+entity.animation.on('complete', function (anim) {
+        console.log('Animation complete', this, anim);  
+});
 
 entity.animation.start('anim1');
 </code></pre>
