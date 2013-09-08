@@ -104,6 +104,9 @@ var Client = IgeClass.extend({
 					// Tell the camera to track our player character with some
 					// tracking smoothing (set to 20)
 					self.vp1.camera.trackTranslate(self.player1, 20);
+					
+					// Set the camera to round it's translate value to avoid sub-pixel rendering
+					self.vp1.camera.trackTranslateRounding(true);
 
 					// Load the Tiled map data and handle the return data
 					ige.addComponent(IgeTiledComponent)
@@ -138,6 +141,8 @@ var Client = IgeClass.extend({
 									layerArray[i]
 										.tileWidth(40)
 										.tileHeight(40)
+										.drawMouse(true)
+										.hoverColor('#ffffff')
 										.autoSection(20)
 										//.isometricMounts(false)
 										.drawBounds(false)
@@ -185,7 +190,7 @@ var Client = IgeClass.extend({
 								destTileY = -1;
 							}
 						});
-
+					
 					// Add the box2d debug painter entity to the
 					// scene to show the box2d body outlines
 					//ige.box2d.enableDebug(self.objectLayer);
