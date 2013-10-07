@@ -27,16 +27,16 @@ var IgeEngine = IgeEntity.extend({
 
 		// Output our header
 		console.log('------------------------------------------------------------------------------');
-		console.log('* Powered by the Isogenic Game Engine ' + igeVersion + '                                  *');
-		console.log('* (C)opyright 2012 Irrelon Software Limited                                  *');
+		console.log('* Powered by the Isogenic Game Engine ' + igeVersion + '                  *');
+		console.log('* (C)opyright 2013 Irrelon Software Limited                                  *');
 		console.log('* http://www.isogenicengine.com                                              *');
 		console.log('------------------------------------------------------------------------------');
 		
 		IgeEntity.prototype.init.call(this);
 
-		// Check if we should add the CocoonJS support component
+		// Check if we are running client-side
 		if (!this.isServer) {
-			// Enable cocoonJS support because we are running native
+			// Enable cocoonJS support because we are running client-side
 			this.addComponent(IgeCocoonJsComponent);
 		}
 
@@ -51,6 +51,11 @@ var IgeEngine = IgeEntity.extend({
 		// Setup components
 		this.addComponent(IgeInputComponent);
 		this.addComponent(IgeTweenComponent);
+		
+		if (!this.isServer) {
+			// Enable UI element (virtual DOM) support
+			this.addComponent(IgeUiManagerComponent);
+		}
 
 		// Set some defaults
 		this._renderModes = [
@@ -343,11 +348,16 @@ var IgeEngine = IgeEntity.extend({
 				this.log('Loading SceneGraph data class: ' + className);
 				classInstance = this.newClassInstance(className);
 				
-				// Call the class's graph() method passing the options in
-				classInstance.addGraph(options);
-				
-				// Add the graph instance to the holding array
-				this._graphInstances[className] = classInstance;
+				// Make sure the graph class implements the required methods "addGraph" and "removeGraph"
+				if (typeof(classInstance.addGraph) === 'function' && typeof(classInstance.removeGraph) === 'function') {
+					// Call the class's graph() method passing the options in
+					classInstance.addGraph(options);
+					
+					// Add the graph instance to the holding array
+					this._graphInstances[className] = classInstance;
+				} else {
+					this.log('Could not load graph for class name "' + className + '" because the class does not implement both the require methods "addGraph()" and "removeGraph()".', 'error');
+				}
 			} else {
 				this.log('Cannot load graph for class name "' + className + '" because the class could not be found. Have you included it in your server/clientConfig.js file?', 'error');
 			}
@@ -602,7 +612,10 @@ var IgeEngine = IgeEntity.extend({
 	 * @private
 	 */
 	_removeStatsDiv: function () {
-		document.body.removeChild(this._statsDiv);
+		if (this._statsDiv) {
+			document.body.removeChild(this._statsDiv);
+		}
+		
 		delete this._statsDiv;
 	},
 

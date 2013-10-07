@@ -688,14 +688,16 @@ var IgeEntity = IgeObject.extend({
 	 * destroyed.
 	 * @param {Number=} milliseconds The number of milliseconds the entity
 	 * will live for from the current time.
+	 * @param {Function=} deathCallback Optional callback method to call when
+	 * the entity is destroyed from end of lifespan.
 	 * @example #Set the lifespan of the entity to 2 seconds after which it will automatically be destroyed
 	 *     entity.lifeSpan(2000);
 	 * @return {*} "this" when arguments are passed to allow method
 	 * chaining or the current value if no arguments are specified.
 	 */
-	lifeSpan: function (milliseconds) {
+	lifeSpan: function (milliseconds, deathCallback) {
 		if (milliseconds !== undefined) {
-			this.deathTime(ige._currentTime + milliseconds);
+			this.deathTime(ige._currentTime + milliseconds, deathCallback);
 			return this;
 		}
 
@@ -711,14 +713,20 @@ var IgeEntity = IgeObject.extend({
 	 * to the engine's start time of zero rather than the current time that
 	 * would be retrieved from new Date().getTime(). It is usually easier
 	 * to call lifeSpan() rather than setting the deathTime directly.
+	 * @param {Function=} deathCallback Optional callback method to call when
+	 * the entity is destroyed from end of lifespan.
 	 * @example #Set the death time of the entity to 60 seconds after engine start
 	 *     entity.deathTime(60000);
 	 * @return {*} "this" when arguments are passed to allow method
 	 * chaining or the current value if no arguments are specified.
 	 */
-	deathTime: function (val) {
+	deathTime: function (val, deathCallback) {
 		if (val !== undefined) {
 			this._deathTime = val;
+			
+			if (deathCallback !== undefined) {
+				this._deathCallBack = deathCallback;
+			}
 			return this;
 		}
 
@@ -884,6 +892,7 @@ var IgeEntity = IgeObject.extend({
 	 * Sets the geometry of the entity to match the width and height
 	 * of the assigned texture cell. If the texture is not cell-based
 	 * the entire texture width / height will be used.
+	 * @param {Number=} percent The percentage size to resize to.
 	 * @example #Set the entity dimensions based on the assigned texture and cell
 	 *     var texture = new IgeSpriteSheet('path/to/some/cellSheet.png', [
 	 *         [0, 0, 40, 40, 'robotHead'],
@@ -898,11 +907,15 @@ var IgeEntity = IgeObject.extend({
 	 * @return {*} The object this method was called from to allow
 	 * method chaining
 	 */
-	dimensionsFromCell: function () {
+	dimensionsFromCell: function (percent) {
 		if (this._texture) {
-			this.width(this._texture._cells[this._cell][2]);
-			this.height(this._texture._cells[this._cell][3]);
-
+			if (percent === undefined) {
+				this.width(this._texture._cells[this._cell][2]);
+				this.height(this._texture._cells[this._cell][3]);
+			} else {
+				this.width(Math.floor(this._texture._cells[this._cell][2] / 100 * percent));
+				this.height(Math.floor(this._texture._cells[this._cell][3] / 100 * percent));
+			}
 			// Recalculate localAabb
 			this.localAabb(true);
 		}
@@ -1301,29 +1314,28 @@ var IgeEntity = IgeObject.extend({
 	},
 
 	_projectionOverlap: function (otherObject) {
-		// TODO: Potentially caching the IgePoints here unless this._geometry has changed may speed things up somewhat
 		var thisG3d = this._geometry,
-			thisMin = new IgePoint(
-				this._translate.x - thisG3d.x / 2,
-				this._translate.y - thisG3d.y / 2,
-				this._translate.z - thisG3d.z
-			),
-			thisMax = new IgePoint(
-				this._translate.x + thisG3d.x / 2,
-				this._translate.y + thisG3d.y / 2,
-				this._translate.z + thisG3d.z
-			),
+			thisMin = {
+				x: this._translate.x - thisG3d.x / 2,
+				y: this._translate.y - thisG3d.y / 2,
+				z: this._translate.z - thisG3d.z
+			},
+			thisMax = {
+				x: this._translate.x + thisG3d.x / 2,
+				y: this._translate.y + thisG3d.y / 2,
+				z: this._translate.z + thisG3d.z
+			},
 			otherG3d = otherObject._geometry,
-			otherMin = new IgePoint(
-				otherObject._translate.x - otherG3d.x / 2,
-				otherObject._translate.y - otherG3d.y / 2,
-				otherObject._translate.z - otherG3d.z
-			),
-			otherMax = new IgePoint(
-				otherObject._translate.x + otherG3d.x / 2,
-				otherObject._translate.y + otherG3d.y / 2,
-				otherObject._translate.z + otherG3d.z
-			);
+			otherMin = {
+				x: otherObject._translate.x - otherG3d.x / 2,
+				y: otherObject._translate.y - otherG3d.y / 2,
+				z: otherObject._translate.z - otherG3d.z
+			},
+			otherMax = {
+				x: otherObject._translate.x + otherG3d.x / 2,
+				y: otherObject._translate.y + otherG3d.y / 2,
+				z: otherObject._translate.z + otherG3d.z
+			};
 
 		return this._internalsOverlap(
 			thisMin.x - thisMax.y,
@@ -1514,6 +1526,12 @@ var IgeEntity = IgeObject.extend({
 	update: function (ctx) {
 		// Check if the entity should still exist
 		if (this._deathTime !== undefined && this._deathTime <= ige._tickStart) {
+			// Check if the deathCallBack was set
+			if (this._deathCallBack) {
+				this._deathCallBack.apply(this);
+				delete this._deathCallback;
+			}
+			
 			// The entity should be removed because it has died
 			this.destroy();
 		} else {
@@ -1596,83 +1614,13 @@ var IgeEntity = IgeObject.extend({
 				// Check for cached version
 				if (this._cache || this._compositeCache) {
 					// Caching is enabled
-					var currentCam = ige._currentCamera;
-					
-					if (!this._cacheDirty) {
-						if (this._ignoreCamera) {
-							
-							/*ctx.scale(currentCam._scale.x, currentCam._scale.y);
-							ctx.translate(currentCam._translate.x, currentCam._translate.y);
-							ctx.scale(1 / currentCam._scale.x, 1/ currentCam._scale.y);*/
-						}
-						
-						this._renderCache(ctx);
-					} else {
-						// The cache is not clean so re-draw it
-						// Render the entity to the cache
-						var _canvas = this._cacheCanvas,
-							_ctx = this._cacheCtx;
-
-						if (this._compositeCache) {
-							// Get the composite entity AABB and alter the internal canvas
-							// to the composite size so we can render the entire entity
-							var aabbC = this.compositeAabb(true);
-							
-							if (this._parent) {
-								//aabbC.x -= this._parent._translate.x;
-								//aabbC.y -= this._parent._translate.y;
-							}
-							
-							if (this._ignoreCamera) {
-								//aabbC.x -= currentCam._translate.x;
-								//aabbC.y -= currentCam._translate.y;
-								
-								//aabbC.x *= currentCam._scale.x;
-								//aabbC.y *= currentCam._scale.y;
-								//aabbC.width *= currentCam._scale.x;
-								//aabbC.height *= currentCam._scale.y;
-							}
-							
-							this._compositeAabbCache = aabbC;
-							
-							if (aabbC.width > 0 && aabbC.height > 0) {
-								_canvas.width = Math.ceil(aabbC.width);
-								_canvas.height = Math.ceil(aabbC.height);
-							} else {
-								// We cannot set a zero size for a canvas, it will
-								// cause the browser to freak out
-								_canvas.width = 2;
-								_canvas.height = 2;
-							}
-							
-							// Translate to the center of the canvas
-							_ctx.translate(-aabbC.x, -aabbC.y);
-							
-							this.emit('compositeReady');
-						} else {
-							if (this._geometry.x > 0 && this._geometry.y > 0) {
-								_canvas.width = this._geometry.x;
-								_canvas.height = this._geometry.y;
-							} else {
-								// We cannot set a zero size for a canvas, it will
-								// cause the browser to freak out
-								_canvas.width = 1;
-								_canvas.height = 1;
-							}
-							
-							// Translate to the center of the canvas
-							_ctx.translate(this._geometry.x2, this._geometry.y2);
-							
-							this._cacheDirty = false;
-						}
-						
-						// Transform the context by the current transform settings
-						if (!dontTransform) {
-							this._transformContext(_ctx);
-						}
-						//_ctx.translate(this._translate.x, this._translate.y);
-						this._renderEntity(_ctx, dontTransform);
+					if (this._cacheDirty) {
+						// The cache is dirty, redraw it
+						this._refreshCache(dontTransform);
 					}
+					
+					// Now render the cached image data to the main canvas
+					this._renderCache(ctx);
 				} else {
 					// Non-cached output
 					// Transform the context by the current transform settings
@@ -1702,6 +1650,58 @@ var IgeEntity = IgeObject.extend({
 				IgeObject.prototype.tick.call(this, ctx);
 			}
 		}
+	},
+	
+	_refreshCache: function (dontTransform) {
+		// The cache is not clean so re-draw it
+		// Render the entity to the cache
+		var _canvas = this._cacheCanvas,
+			_ctx = this._cacheCtx;
+
+		if (this._compositeCache) {
+			// Get the composite entity AABB and alter the internal canvas
+			// to the composite size so we can render the entire entity
+			var aabbC = this.compositeAabb(true);
+			
+			this._compositeAabbCache = aabbC;
+			
+			if (aabbC.width > 0 && aabbC.height > 0) {
+				_canvas.width = Math.ceil(aabbC.width);
+				_canvas.height = Math.ceil(aabbC.height);
+			} else {
+				// We cannot set a zero size for a canvas, it will
+				// cause the browser to freak out
+				_canvas.width = 2;
+				_canvas.height = 2;
+			}
+			
+			// Translate to the center of the canvas
+			_ctx.translate(-aabbC.x, -aabbC.y);
+			
+			this.emit('compositeReady');
+		} else {
+			if (this._geometry.x > 0 && this._geometry.y > 0) {
+				_canvas.width = this._geometry.x;
+				_canvas.height = this._geometry.y;
+			} else {
+				// We cannot set a zero size for a canvas, it will
+				// cause the browser to freak out
+				_canvas.width = 1;
+				_canvas.height = 1;
+			}
+			
+			// Translate to the center of the canvas
+			_ctx.translate(this._geometry.x2, this._geometry.y2);
+			
+			this._cacheDirty = false;
+		}
+		
+		// Transform the context by the current transform settings
+		if (!dontTransform) {
+			this._transformContext(_ctx);
+		}
+		
+		this._renderEntity(_ctx, dontTransform);
 	},
 
 	/**
@@ -3344,8 +3344,8 @@ var IgeEntity = IgeObject.extend({
 			arr,
 			i;
 
-		// Send the client an entity create command first
-		ige.network.send('_igeStreamDestroy', thisId, clientId);
+		// Send clients the stream destroy command for this entity
+		ige.network.send('_igeStreamDestroy', [ige._currentTime, thisId], clientId);
 		
 		ige.network.stream._streamClientCreated[thisId] = ige.network.stream._streamClientCreated[thisId] || {};
 
@@ -3401,7 +3401,12 @@ var IgeEntity = IgeObject.extend({
 				for (sectionIndex = 0; sectionIndex < sectionCount; sectionIndex++) {
 					sectionData = '';
 					sectionId = sectionArr[sectionIndex];
-
+					
+					// Stream section sync intervals allow individual stream sections
+					// to be streamed at different (usually longer) intervals than other
+					// sections so you could for instance reduce the number of updates
+					// a particular section sends out in a second because the data is
+					// not that important compared to updated transformation data
 					if (this._streamSyncSectionInterval && this._streamSyncSectionInterval[sectionId]) {
 						// Check if the section interval has been reached
 						this._streamSyncSectionDelta[sectionId] += ige._tickDelta;
@@ -3478,7 +3483,7 @@ var IgeEntity = IgeObject.extend({
 	/**
 	 * Processes the time stream for the entity.
 	 * @param {Number} renderTime The time that the time stream is
-	 * targetting to render the entity at.
+	 * targeting to render the entity at.
 	 * @param {Number} maxLerp The maximum lerp before the value
 	 * is assigned directly instead of being interpolated.
 	 * @private

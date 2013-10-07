@@ -163,3 +163,11 @@ pip-log.txt
 .DS_Store
 
 .idea
+
+.old*
+.deploy*
+
+npm-debug.log
+
+# Ignore all node_modules
+server/node_modules*
