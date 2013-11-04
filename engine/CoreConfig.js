@@ -12,6 +12,7 @@ var igeCoreConfig = {
 		['csap', 'IgeRect', 'core/IgeRect.js'],
 		['csap', 'IgeMatrix2d', 'core/IgeMatrix2d.js'],
 		/* Components */
+		['csap', 'IgeTimeComponent', 'components/IgeTimeComponent.js'],
 		['csap', 'IgeAnimationComponent', 'components/IgeAnimationComponent.js'],
 		['csap', 'IgeVelocityComponent', 'components/IgeVelocityComponent.js'],
 		['csap', 'IgeTweenComponent', 'components/IgeTweenComponent.js'],
@@ -23,6 +24,8 @@ var igeCoreConfig = {
 		['csap', 'IgeUiManagerComponent', 'components/IgeUiManagerComponent.js'],
 		['csap', 'IgeEntityManager', 'components/entityManager/IgeEntityManager.js'],
 		['csap', 'IgeEntityManagerComponent', 'components/IgeEntityManagerComponent.js'],
+		['csap', 'IgeEditorComponent', 'components/editor/IgeEditorComponent.js'],
+		['csap', 'IgeEditorPanelsComponent', 'components/editor/panels/IgeEditorPanelsComponent.js'],
 		['csap', 'IgeEditorTranslateComponent', 'components/editor/IgeEditorTranslateComponent.js'],
 		['csap', 'IgeEditorRotateComponent', 'components/editor/IgeEditorRotateComponent.js'],
 		/* Physics Libraries */
@@ -85,6 +88,10 @@ var igeCoreConfig = {
 		['csap', 'IgeViewport', 'core/IgeViewport.js'],
 		['csap', 'IgeScene2d', 'core/IgeScene2d.js'],
 		['csap', 'IgeQuest', 'core/IgeQuest.js'],
+		['csap', 'IgeInterval', 'core/IgeInterval.js'],
+		['csap', 'IgeTimeout', 'core/IgeTimeout.js'],
+		['csap', 'IgeCuboidSmartTexture', 'assets/IgeCuboidSmartTexture.js'],
+		['csap', 'IgeCuboid', 'primitives/IgeCuboid.js'],
 		/* Physics to Entity Components */
 		['csap', 'IgeBox2dComponent', 'components/physics/box2d/IgeBox2dComponent.js'],
 		['csap', 'IgeEntityBox2d', 'components/physics/box2d/IgeEntityBox2d.js'],
@@ -94,6 +101,7 @@ var igeCoreConfig = {
 		['csap', 'IgeUiRadioButton', 'ui/IgeUiRadioButton.js'],
 		['csap', 'IgeUiProgressBar', 'ui/IgeUiProgressBar.js'],
 		['csap', 'IgeUiTextBox', 'ui/IgeUiTextBox.js'],
+		['csap', 'IgeUiLabel', 'ui/IgeUiLabel.js'],
 		['csap', 'IgeUiTooltip', 'ui/IgeUiTooltip.js'],
 		['csap', 'IgeUiMenu', 'ui/IgeUiMenu.js'],
 		['csap', 'IgeUiTimeStream', 'ui/IgeUiTimeStream.js'],
