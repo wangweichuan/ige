@@ -62,7 +62,7 @@ You also require a license if you are using the engine as a registered / limited
 
 * Website: http://www.isogenicengine.com
 * Store: http://store.isogenicengine.com
-* Forum: http://store.isogenicengine.com/forum
+* Forum: http://www.isogenicengine.com/forum
 * API Docs: http://www.isogenicengine.com/documentation/isogenic-game-engine/versions/1-1-0/
 * Video Tutorials: http://www.youtube.com/playlist?list=PL3bbQ5EMaCKgch0gzt8_7D3MQVAOA7zXF
 * Updates, News & Changelog: http://www.isogenicengine.com/forum/viewforum.php?f=8
